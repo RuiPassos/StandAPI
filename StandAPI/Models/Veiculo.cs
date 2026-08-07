@@ -4,9 +4,9 @@ namespace StandAPI.Models;
 
 public enum Combustivel
 {
-    Gasolina,
-    Gasoleo, 
-    Eletrico,
+    Gasolina = 0,
+    Gasoleo = 1, 
+    Eletrico = 2,
 }
 
 public class Veiculo
