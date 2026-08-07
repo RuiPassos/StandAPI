@@ -798,24 +798,25 @@
     ]
   },
   "packageFolders": {
-    "/home/sword/.nuget/packages/": {}
+    "/Users/ruipassos/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/sword/Workspace/StandAPI/StandAPI/StandAPI.csproj",
+      "projectUniqueName": "/Users/ruipassos/Documents/FirstAPICSharp/StandAPI/StandAPI/StandAPI.csproj",
       "projectName": "StandAPI",
-      "projectPath": "/home/sword/Workspace/StandAPI/StandAPI/StandAPI.csproj",
-      "packagesPath": "/home/sword/.nuget/packages/",
-      "outputPath": "/home/sword/Workspace/StandAPI/StandAPI/obj/",
+      "projectPath": "/Users/ruipassos/Documents/FirstAPICSharp/StandAPI/StandAPI/StandAPI.csproj",
+      "packagesPath": "/Users/ruipassos/.nuget/packages/",
+      "outputPath": "/Users/ruipassos/Documents/FirstAPICSharp/StandAPI/StandAPI/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/sword/.nuget/NuGet/NuGet.Config"
+        "/Users/ruipassos/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
+        "/Users/ruipassos/.dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -874,7 +875,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/home/sword/.dotnet/sdk/10.0.302/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/Users/ruipassos/.dotnet/sdk/10.0.302/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

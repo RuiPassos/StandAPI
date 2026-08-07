@@ -8,13 +8,12 @@ namespace StandAPI.Controllers;
 [Route("api/veiculos")] // O endereço base vai ser /api/veiculos
 public class VeiculosController : ControllerBase
 {
-    // A nossa "Base de Dados" falsa por agora (estática para não se perder a cada request)
-    public static List<Veiculo> baseDeDadosDeVeiculos = new List<Veiculo>
-    {
-        new Veiculo("HH-43-KM", "BMW", "320", 1500, Combustivel.Gasolina),
-        new Veiculo("MH-KJ-85", "BMW", "550", 2100, Combustivel.Gasoleo)
+    private readonly IConfiguration _configuration;
 
-    };
+    public VeiculosController(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
 
     // O equivalente ao botão "Listar"
     [HttpGet]
@@ -22,7 +21,7 @@ public class VeiculosController : ControllerBase
     {
         var listaDeVeiculos = new List<Veiculo>();
 
-        string connectionString = "Data source=/home/sword/Workspace/StandAPI/StandAPI/stand.db";
+        string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
         using (var connection = new SqliteConnection(connectionString))
         {
@@ -39,7 +38,7 @@ public class VeiculosController : ControllerBase
                         reader.GetString(0),
                         reader.GetString(1),
                         reader.GetString(2),
-                        reader.GetInt32(3),
+                        reader.GetDouble(3),
                         (Combustivel)reader.GetInt32(4)
                     );
                     listaDeVeiculos.Add(veiculo);
@@ -54,7 +53,7 @@ public class VeiculosController : ControllerBase
     [HttpPost]
     public IActionResult AdicionarNovo(Veiculo novoVeiculo)
     {
-        string connectionString = "Data source=/home/sword/Workspace/StandAPI/StandAPI/stand.db";
+        string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
         using (var connection = new SqliteConnection(connectionString))
         {
@@ -87,51 +86,89 @@ public class VeiculosController : ControllerBase
         }
     }
 
-    [ApiController]
-    [Route("api/veiculos/{matricula}")] // O endereço base vai ser /api/veiculos
-    public class VeiculoController : ControllerBase
-    {
-        [HttpPut]
-        public IActionResult Atualizar(Veiculo veiculo)
+    [HttpPut("{matricula}")]
+    public IActionResult Atualizar(string matricula, string marca, string modelo, double peso, int combustivel)
         {
-            if (!string.IsNullOrEmpty(veiculo.Matricula))
+            try
             {
-                var veiculoExistente =
-                    VeiculosController.baseDeDadosDeVeiculos.FirstOrDefault(v => v.Matricula == veiculo.Matricula);
-                if (veiculoExistente != null)
-                {
-                    veiculoExistente.Marca = veiculo.Marca;
-                    veiculoExistente.Modelo = veiculo.Modelo;
-                    veiculoExistente.Peso = veiculo.Peso;
-                    veiculoExistente.Comb = veiculo.Comb;
+                string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
-                    return Ok(veiculoExistente);
-                }
-                else
+                using (var connection = new SqliteConnection(connectionString))
                 {
-                    return NotFound("Veículo não encontrado na base de dados!");
+                    connection.Open();
+
+                    var updateCommand = connection.CreateCommand();
+                    updateCommand.CommandText =
+                        "UPDATE veiculos SET marca = @marca, modelo = @modelo, peso = @peso, combustivel = @combustivel WHERE matricula = @matricula";
+                    if (!string.IsNullOrEmpty(matricula))
+                    {
+                        updateCommand.Parameters.AddWithValue("@matricula", matricula);
+                    }
+
+                    if (!string.IsNullOrEmpty(marca))
+                    {
+                        updateCommand.Parameters.AddWithValue("@marca", marca);
+                    }
+
+                    if (!string.IsNullOrEmpty(modelo))
+                    {
+                        updateCommand.Parameters.AddWithValue("@modelo", modelo);
+                    }
+
+                    if (peso > 0)
+                    {
+                        updateCommand.Parameters.AddWithValue("@peso", peso);
+                    }
+
+                    if (combustivel >= 0 && combustivel < 3)
+                    {
+                        updateCommand.Parameters.AddWithValue("@combustivel", combustivel);
+                    }
+
+                    updateCommand.ExecuteNonQuery();
+                    return Ok();
                 }
             }
-            else
+            catch (SqliteException e)
             {
-                return BadRequest("Matrícula inválida!");
+                if (e.SqliteErrorCode == 19)
+                {
+                    return Conflict();
+                }
+                return StatusCode(500, e.Message);
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{matricula}")]
         public IActionResult Eliminar(string matricula)
         {
-            var veiculoExistente =
-                VeiculosController.baseDeDadosDeVeiculos.FirstOrDefault(v => v.Matricula == matricula);
-            if (veiculoExistente != null)
+            try
             {
-                VeiculosController.baseDeDadosDeVeiculos.Remove(veiculoExistente);
-                return NoContent();
+                string connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+                using (var connection = new SqliteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    var updateCommand = connection.CreateCommand();
+                    updateCommand.CommandText = "DELETE FROM veiculos WHERE matricula = @matricula";
+                        
+                    if (!string.IsNullOrEmpty(matricula))
+                    {
+                        updateCommand.Parameters.AddWithValue("@matricula", matricula);
+                    }
+
+                    updateCommand.ExecuteNonQuery();
+                    return NoContent();
+                }
             }
-            else
+            catch (SqliteException e)
             {
-                return NotFound("Veículo não encontrado na base de dados!");
+                if (e.SqliteErrorCode == 19)
+                {
+                    return Conflict();
+                }
+                return StatusCode(500, e.Message);
             }
         }
-    }
 }

@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace StandAPI.Models;
 
@@ -20,7 +21,7 @@ public class Veiculo
         {
             string regexMatricula =
                 "^(([A-Z]{2}-\\d{2}-\\d{2})|(\\d{2}-\\d{2}-[A-Z]{2})|(\\d{2}-[A-Z]{2}-\\d{2})|([A-Z]{2}-\\d{2}-[A-Z]{2}))$";
-            if (value.Length == 8 || Regex.IsMatch(value.ToUpper(), regexMatricula))
+            if (Regex.IsMatch(value.ToUpper(), regexMatricula))
             {
                 _matricula = value;
             }
