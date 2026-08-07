@@ -5,7 +5,8 @@ namespace StandAPI.Models;
 public enum Combustivel
 {
     Gasolina,
-    Gasoleo
+    Gasoleo, 
+    Eletrico,
 }
 
 public class Veiculo
@@ -18,7 +19,7 @@ public class Veiculo
         set
         {
             string regexMatricula =
-                "^(([A-Z]{2}-\\d{2}-\\d{2})|(\\d{2}-\\d{2}-[A-Z]{2})|(\\d{2}-[A-Z]{2}-\\d{2})|([A-Z]{2}-\\d{2}-[A-Z]{2}))$\n";
+                "^(([A-Z]{2}-\\d{2}-\\d{2})|(\\d{2}-\\d{2}-[A-Z]{2})|(\\d{2}-[A-Z]{2}-\\d{2})|([A-Z]{2}-\\d{2}-[A-Z]{2}))$";
             if (value.Length == 8 || Regex.IsMatch(value.ToUpper(), regexMatricula))
             {
                 _matricula = value;
@@ -30,10 +31,54 @@ public class Veiculo
         }
     }
     
-    public string Marca { get; set; }
-    public string Modelo { get; set; }
-    public double Peso { get; set; }
-    public Combustivel Comb { get; set; }
+    private string _marca = "";
+    public string Marca
+    {
+        get { return _marca; }
+        set
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException("Marca não pode ser nula ou vazia");
+            }
+            _marca = value;
+        }
+    }
+    
+    private string _modelo = "";
+    public string Modelo
+    {
+        get { return _modelo; }
+        set
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException("Modelo não pode ser nulo ou vazio");
+            }
+            _modelo = value;
+        }
+    }
+    
+    private double _peso;
+    public double Peso
+    {
+        get { return _peso; }
+        set
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException("Peso não pode ser negativo");
+            }
+            _peso = value;
+        }
+    }
+    
+    private Combustivel _comb;
+    public Combustivel Comb
+    {
+        get { return _comb; }
+        set { _comb = value; }
+    }
 
     public Veiculo(string matricula, string marca, string modelo, double peso, Combustivel comb)
     {

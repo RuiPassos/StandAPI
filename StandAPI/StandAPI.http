@@ -1,6 +1,24 @@
 @StandAPI_HostAddress = http://localhost:5163
 
-GET {{StandAPI_HostAddress}}/weatherforecast/
+### Listar todos os veículos
+GET {{StandAPI_HostAddress}}/api/veiculos
 Accept: application/json
 
-###
+### Adicionar um novo veículo
+POST {{StandAPI_HostAddress}}/api/veiculos
+Content-Type: application/json
+
+{
+    "matricula": "AB-12-CD",
+    "marca": "Toyota",
+    "modelo": "Corolla",
+    "peso": 1300,
+    "comb": "Gasolina"
+}
+
+### Atualizar parcialmente um veiculo
+PUT {{StandAPI_HostAddress}}/api/veiculos/{{matricula}}
+
+
+### Eliminar um veiculo
+DELETE {{StandAPI_HostAddress}}/api/veiculos/{{matricula}}
