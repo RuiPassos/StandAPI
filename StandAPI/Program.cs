@@ -1,10 +1,16 @@
+using StandAPI.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var dbPath = Path.Combine(builder.Environment.ContentRootPath, "stand.db");
+builder.Configuration["ConnectionStrings:DefaultConnection"] = $"Data Source={dbPath}";
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+builder.Services.AddScoped<IVeiculoRepository, VeiculoRepository>(); // adicioanr
 
 var app = builder.Build();
 

@@ -8,17 +8,8 @@ Accept: application/json
 POST {{StandAPI_HostAddress}}/api/veiculos
 Content-Type: application/json
 
-{
-    "matricula": "AB-12-CD",
-    "marca": "Toyota",
-    "modelo": "Corolla",
-    "peso": 1300,
-    "comb": "Gasolina"
-}
-
 ### Atualizar parcialmente um veiculo
 PUT {{StandAPI_HostAddress}}/api/veiculos/{{matricula}}
-
 
 ### Eliminar um veiculo
 DELETE {{StandAPI_HostAddress}}/api/veiculos/{{matricula}}
