@@ -111,7 +111,7 @@ public class VeiculoRepository : IVeiculoRepository
         command.Parameters.AddWithValue("@matricula", veiculo.Matricula);
         command.Parameters.AddWithValue("@marca", veiculo.Marca);
         command.Parameters.AddWithValue("@modelo", veiculo.Modelo);
-        command.Parameters.AddWithValue("@preco", veiculo.Peso);
+        command.Parameters.AddWithValue("@peso", veiculo.Peso);
         command.Parameters.AddWithValue("@combustivel", (int)veiculo.Comb);
     }
 }
