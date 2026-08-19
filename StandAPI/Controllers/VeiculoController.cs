@@ -23,11 +23,11 @@ public class VeiculosController : ControllerBase
         return Ok(veiculos);
     }
     
-    // Listar por matricula
-    [HttpGet("{matricula}")]
-    public IActionResult ObterPorMatricula(string matricula) 
+    // Listar por id
+    [HttpGet("{id}")]
+    public IActionResult ObterPorId(int id) 
     {
-        var veiculo = _repository.ObterPorMatricula(matricula);
+        var veiculo = _repository.ObterPorId(id);
 
         if (veiculo == null)
         {
@@ -43,34 +43,37 @@ public class VeiculosController : ControllerBase
     [HttpPost]
     public IActionResult AdicionarNovo(Veiculo novoVeiculo)
     {
-        var veiculo = _repository.Adicionar(novoVeiculo);
+        var novoId = _repository.Adicionar(novoVeiculo);
 
-        if (!veiculo)
+        if (novoId == -1)
         {
             return Conflict("Veiculo with the same matricula already exists");
         }
-        
-        return CreatedAtAction(nameof(ObterPorMatricula), new { matricula = novoVeiculo.Matricula }, novoVeiculo);
+
+        var veiculoCriado = _repository.ObterPorId(novoId);
+        return CreatedAtAction(nameof(ObterPorId), new { id = novoId }, veiculoCriado);
     }
 
     // Atualizar Veiculo
-    [HttpPut("{matricula}")]
-    public IActionResult Atualizar(Veiculo veiculo)
+    [HttpPut("{id}")]
+    public IActionResult Atualizar(int id, Veiculo veiculo)
     {
+        veiculo.Id = id;
         var veiculoAtualizado = _repository.Atualizar(veiculo);
 
         if (!veiculoAtualizado)
         {
             return NotFound("Veiculo not found");
         }
-        
+
         return Ok(veiculo);
     }
 
-    [HttpDelete("{matricula}")]
-    public IActionResult Elimianr(string matricula)
+    // Eliminar Veiculo
+    [HttpDelete("{id}")]
+    public IActionResult Eliminar(int id)
     {
-        var veiculoExcluido = _repository.Excluir(matricula);
+        var veiculoExcluido = _repository.Excluir(id);
         
         if (!veiculoExcluido)
         {

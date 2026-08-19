@@ -23,7 +23,7 @@ public class Veiculo
                 "^(([A-Z]{2}-\\d{2}-\\d{2})|(\\d{2}-\\d{2}-[A-Z]{2})|(\\d{2}-[A-Z]{2}-\\d{2})|([A-Z]{2}-\\d{2}-[A-Z]{2}))$";
             if (Regex.IsMatch(value.ToUpper(), regexMatricula))
             {
-                _matricula = value;
+                _matricula = value.ToUpper();
             }
             else
             {
@@ -40,7 +40,7 @@ public class Veiculo
         {
             if (string.IsNullOrEmpty(value))
             {
-                throw new ArgumentNullException("Marca não pode ser nula ou vazia");
+                throw new ArgumentException("Marca não pode ser nula ou vazia");
             }
             _marca = value;
         }
@@ -54,7 +54,7 @@ public class Veiculo
         {
             if (string.IsNullOrEmpty(value))
             {
-                throw new ArgumentNullException("Modelo não pode ser nulo ou vazio");
+                throw new ArgumentException("Modelo não pode ser nulo ou vazio");
             }
             _modelo = value;
         }
@@ -80,9 +80,24 @@ public class Veiculo
         get { return _comb; }
         set { _comb = value; }
     }
-
-    public Veiculo(string matricula, string marca, string modelo, double peso, Combustivel comb)
+    
+    private int _id;
+    public int Id
     {
+        get { return _id; }
+        set
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException("Id não pode ser negativo");
+            }
+            _id = value;
+        }
+    }
+
+    public Veiculo(int id, string matricula, string marca, string modelo, double peso, Combustivel comb)
+    {
+        this.Id = id;
         this.Matricula = matricula;
         this.Marca = marca;
         this.Modelo = modelo;
@@ -92,6 +107,6 @@ public class Veiculo
 
     override public string ToString()
     {
-        return $"{Matricula} {Marca} {Modelo} {Peso}";
+        return $"{Id} | {Matricula} {Marca} {Modelo} {Peso}";
     }
 }

@@ -1,15 +1,37 @@
 @StandAPI_HostAddress = http://localhost:5163
+@id = 1
 
 ### Listar todos os veículos
 GET {{StandAPI_HostAddress}}/api/veiculos
+Accept: application/json
+
+### Listar um veiculo por id
+GET {{StandAPI_HostAddress}}/api/veiculos/{{id}}
 Accept: application/json
 
 ### Adicionar um novo veículo
 POST {{StandAPI_HostAddress}}/api/veiculos
 Content-Type: application/json
 
-### Atualizar parcialmente um veiculo
-PUT {{StandAPI_HostAddress}}/api/veiculos/{{matricula}}
+{
+  "matricula": "AA-11-BB",
+  "marca": "Toyota",
+  "modelo": "Corolla",
+  "peso": 1200,
+  "comb": 0
+}
+
+### Atualizar um veiculo
+PUT {{StandAPI_HostAddress}}/api/veiculos/{{id}}
+Content-Type: application/json
+
+{
+  "matricula": "AA-11-BB",
+  "marca": "Toyota",
+  "modelo": "Corolla",
+  "peso": 1250,
+  "comb": 0
+}
 
 ### Eliminar um veiculo
-DELETE {{StandAPI_HostAddress}}/api/veiculos/{{matricula}}
+DELETE {{StandAPI_HostAddress}}/api/veiculos/{{id}}
